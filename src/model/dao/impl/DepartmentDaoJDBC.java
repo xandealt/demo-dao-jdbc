@@ -10,6 +10,7 @@ import db.DB;
 import db.DbException;
 import model.dao.DepartmentDao;
 import model.entities.Department;
+import model.entities.Seller;
 
 public class DepartmentDaoJDBC implements DepartmentDao {
 
@@ -50,9 +51,7 @@ public class DepartmentDaoJDBC implements DepartmentDao {
       st.setInt(1, id);
       rs = st.executeQuery();
       if (rs.next()) {
-        Department dep = new Department();
-        dep.setId(rs.getInt("Id"));
-        dep.setName(rs.getString("Name"));
+        Department dep = instantiateDepartment(rs);
 
         return dep;
       }
@@ -70,6 +69,24 @@ public class DepartmentDaoJDBC implements DepartmentDao {
   public List<Department> findAll() {
     // TODO Auto-generated method stub
     throw new UnsupportedOperationException("Unimplemented method 'findAll'");
+  }
+
+  private Seller intatiateSeller(ResultSet rs, Department dep) throws SQLException {
+    Seller obj = new Seller();
+    obj.setId(rs.getInt("Id"));
+    obj.setName(rs.getString("Name"));
+    obj.setEmail(rs.getString("Email"));
+    obj.setBaseSalary(rs.getDouble("BaseSalary"));
+    obj.setBirthDate(rs.getDate("BirthDate"));
+    obj.setDepartment(dep);
+    return obj;
+  }
+
+  private Department instantiateDepartment(ResultSet rs) throws SQLException {
+    Department dep = new Department();
+    dep.setId(rs.getInt("Id"));
+    dep.setName(rs.getString("Name"));
+    return dep;
   }
 
 }
